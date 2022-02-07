@@ -6,11 +6,15 @@ const PageStackRouter: FC<{ children?: ReactNode }> = ({ children }) => {
   const [pageStack, setPageStack] = useState<FC[]>([]);
   const push = (page: FC) => setPageStack((pageStack) => [...pageStack, page]);
   const pop = () => setPageStack((pageStack) => pageStack.slice(0, -1));
+  const replace = (page: FC) =>
+    setPageStack((pageStack) => pageStack.splice(-1, 1, page));
+
   return (
     <PageStackRouterContext.Provider
       value={{
         push,
         pop,
+        replace,
       }}
     >
       {children}
