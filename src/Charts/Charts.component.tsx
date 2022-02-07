@@ -1,4 +1,5 @@
 import { FC } from 'react';
+import { usePageStackRouter } from '../PageStackRouter';
 import {
   ChartContainer,
   HelmetContainer,
@@ -15,12 +16,22 @@ import {
 import { song1PNG, song2PNG, song3PNG, song4PNG, song5PNG } from './mock/songs';
 
 const ChartsComponent: FC = () => {
+  const { push, pop } = usePageStackRouter();
+
   return (
     <ChartContainer>
       <HelmetContainer>
-        <HelmetLeft>{'<'}</HelmetLeft>
+        <HelmetLeft onClick={() => pop()}>{'<'}</HelmetLeft>
         <HelmetTitle>Charts</HelmetTitle>
-        <HelmetRight>{'>'}</HelmetRight>
+        <HelmetRight
+          onClick={() => {
+            push(() => {
+              return <div>this is new div</div>;
+            });
+          }}
+        >
+          {'>'}
+        </HelmetRight>
       </HelmetContainer>
       <TodayChartContainer>
         <TodayChartTitle>오늘 Top 100</TodayChartTitle>
