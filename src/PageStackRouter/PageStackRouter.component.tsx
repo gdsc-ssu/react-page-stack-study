@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { FC, ReactNode, useState } from 'react';
+import { FC, ReactNode, useEffect, useState } from 'react';
 import { PageStackRouterContext } from './PageStackRouter.context';
 
 const PageStackRouter: FC<{ children?: ReactNode }> = ({ children }) => {
@@ -9,6 +9,9 @@ const PageStackRouter: FC<{ children?: ReactNode }> = ({ children }) => {
   const replace = (page: FC) =>
     setPageStack((pageStack) => pageStack.splice(-1, 1, page));
 
+  useEffect(() => {
+    setPageStack([() => <>{children}</>]);
+  }, [children]);
   return (
     <PageStackRouterContext.Provider
       value={{
@@ -17,7 +20,6 @@ const PageStackRouter: FC<{ children?: ReactNode }> = ({ children }) => {
         replace,
       }}
     >
-      {children}
       {pageStack.map((Page, index) => (
         <Page key={index} />
       ))}
