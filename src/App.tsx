@@ -1,8 +1,21 @@
 import React from 'react';
-import './App.css';
+import { Routes, Route } from 'react-router-dom';
 
-function App() {
-  return <div className="App"></div>;
-}
+import Layout from './Layout';
+import Contents from './routes/Contents';
+import Home from './routes/Home';
+import NotFound from './routes/NotFound';
+
+const App = () => {
+  return (
+    <Routes>
+      <Route element={<Layout />}>
+        <Route path="/" element={<Home />} />
+        <Route path="/:id" element={<Contents />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
+  );
+};
 
 export default App;
