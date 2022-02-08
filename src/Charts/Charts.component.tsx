@@ -26,7 +26,7 @@ const ChartsComponent: FC = () => {
         <HelmetRight
           onClick={() => {
             push(() => {
-              return <div>this is new div</div>;
+              return <ChartsComponent />;
             });
           }}
         >
