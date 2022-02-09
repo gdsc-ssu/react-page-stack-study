@@ -5,7 +5,7 @@ import HeaderNav from './components/HeaderNav';
 
 const Layout = () => {
   return (
-    <>
+    <div className="container">
       <header>
         <HeaderNav />
       </header>
@@ -15,7 +15,7 @@ const Layout = () => {
       <footer>
         <FooterNav />
       </footer>
-    </>
+    </div>
   );
 };
 

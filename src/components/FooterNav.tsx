@@ -1,39 +1,37 @@
-import React from 'react';
-import { NavLink } from 'react-router-dom';
+import React, { ReactNode } from 'react';
+import { useNavContext } from '../globalState/NavContext';
+
+interface LinkItemType {
+  path: string;
+  children: ReactNode;
+}
 
 const Navigation = () => {
+  const items = [
+    { path: '/', icon: 'fas fa-home' },
+    { path: '/Google', icon: 'fab fa-google' },
+    { path: '/Facebook', icon: 'fab fa-facebook-f' },
+    { path: '/Apple', icon: 'fab fa-apple' },
+  ];
+
   return (
     <nav>
-      <LinkItem path="/">
-        <i className="fas fa-home"></i>
-      </LinkItem>
-      <LinkItem path="/Google">
-        <i className="fab fa-google"></i>
-      </LinkItem>
-      <LinkItem path="/Facebook">
-        <i className="fab fa-facebook-f"></i>
-      </LinkItem>
-      <LinkItem path="/Apple">
-        <i className="fab fa-apple"></i>
-      </LinkItem>
+      {items.map((item) => (
+        <LinkItem path={item.path} key={item.path}>
+          <i className={item.icon}></i>
+        </LinkItem>
+      ))}
     </nav>
   );
 };
 
-const LinkItem = ({ path, children }) => {
-  const activeStyle = {
-    color: 'black',
-  };
+const LinkItem = ({ path, children }: LinkItemType) => {
+  const { moveNext } = useNavContext();
 
   return (
-    <NavLink
-      to={path}
-      style={({ isActive }) => {
-        isActive ? activeStyle : null;
-      }}
-    >
+    <button className="linkItem" onClick={() => moveNext(path)}>
       {children}
-    </NavLink>
+    </button>
   );
 };
 
