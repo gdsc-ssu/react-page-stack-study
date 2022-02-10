@@ -30,7 +30,7 @@ const App = () => {
     <TransitionGroup className={moveType}>
       <CSSTransition
         classNames="slide"
-        timeout={1000}
+        timeout={500}
         key={location.key}
         unmountOnExit
       >
