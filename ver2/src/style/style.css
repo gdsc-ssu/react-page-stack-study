@@ -83,7 +83,7 @@ footer > nav {
   height: 100%;
 }
 
-footer > nav > a {
+.linkItem {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -92,4 +92,5 @@ footer > nav > a {
   text-decoration: none;
   color: gray;
   font-size: 1.5rem;
+  border: 0;
 }
