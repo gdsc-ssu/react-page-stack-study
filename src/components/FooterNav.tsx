@@ -1,4 +1,5 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, useCallback } from 'react';
+import { useParams } from 'react-router-dom';
 import { useNavContext } from '../globalState/NavContext';
 
 interface LinkItemType {
@@ -27,9 +28,14 @@ const Navigation = () => {
 
 const LinkItem = ({ path, children }: LinkItemType) => {
   const { moveNext } = useNavContext();
+  const { id } = useParams();
+
+  const onMoveNext = () => {
+    if (id !== path.slice(1)) moveNext(path);
+  };
 
   return (
-    <button className="linkItem" onClick={() => moveNext(path)}>
+    <button className="linkItem" onClick={onMoveNext}>
       {children}
     </button>
   );
