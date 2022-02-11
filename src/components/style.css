@@ -1,0 +1,57 @@
+.container{
+    min-height:100vh;
+    background-color: #fff;
+    padding: 3rem 0.7rem;
+}
+
+#title{
+    font-size:1.7rem;
+    font-weight: 600;
+    /* margin-bottom: 0.5rem; */
+}
+
+#search{
+    background-color: #eee;
+    font-size:0.9rem;
+    height:1.7rem;
+    line-height: 1.7rem;
+    border-radius: 0.3rem;
+    padding-left:0.3rem;
+    margin:0.7rem 0 1rem;
+}
+
+.number-list a{
+    text-decoration: none;
+    color:#000;
+    font-weight: 500;
+}
+
+.number{
+   /* margin:2rem; */
+}
+
+.number-list hr{
+    height: 0.1px;
+    background-color: #ddd;
+    border: none;
+}
+
+.profile{
+    padding:1rem 0.5rem;
+}
+
+.back-btn{
+    border: none;
+    background-color: transparent;
+    font-size:1rem;
+}
+
+.profile-image{
+    width:80px;
+    height:80px;
+    border-radius:40px;
+    background-color: #ddd;
+    line-height: 80px;
+    text-align: center;
+    font-size: 2rem;
+}
