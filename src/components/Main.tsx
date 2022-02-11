@@ -1,7 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import {numberBook} from '../Numberbook'; 
-import "./style.css";
+import type { FC } from "react";
+import "../style.css";
+
+const Page: FC<{ to: string }> = (props) => <div><Link {...props} /></div>; // prettier-ignore
 
 function Main(){
     return (
@@ -12,9 +15,7 @@ function Main(){
             {numberBook.map((number)=>{
             return (
                 <div key={number.id}>
-                    <Link to="/profile">
-                        <div className="number">{number.name}</div>
-                    </Link>
+                    <Page to={`/${number.id}`}>{number.name}</Page>
                     <hr ></hr>
                 </div>
             )})}
