@@ -1,36 +1,40 @@
-import { FC, ReactNode, useEffect, useState } from 'react';
+import { FC, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { TransitionGroup, CSSTransition } from 'react-transition-group';
+import { TransitionGroup } from 'react-transition-group';
 import { PageStackContext } from '.';
 
 import Page from './Page';
 
+type moveTypes = 'next' | 'back';
+
 const PageStack: FC<any> = ({ AppRoute }) => {
   const [componentStack, setComponentStack] = useState<any[]>([]);
-  const [locationStack, setLocationStack] = useState<string[]>([]);
+  const [moveType, setMoveType] = useState<moveTypes>('next');
 
   const navigate = useNavigate();
 
   const getPage = (location: string) => {
-    return <Page>{AppRoute(location)}</Page>;
+    const pageNum = componentStack.length;
+    return (
+      <Page pageNum={pageNum} key={`${pageNum}`}>
+        {AppRoute(location)}
+      </Page>
+    );
   };
 
   const moveNextPage = (location: string) => {
     navigate(location);
 
     setComponentStack((prev) => [...prev, getPage(location)]);
-    setLocationStack((prev) => [...prev, location]);
+    setMoveType('next');
   };
 
   const moveBeforePage = () => {
-    if (componentStack.length > 1 && locationStack.length > 1) {
-      const poppedLocationStack = [...locationStack];
-      const beforeLocation = poppedLocationStack.pop()!;
-
-      navigate(beforeLocation);
+    if (componentStack.length > 1) {
+      navigate(-1);
 
       setComponentStack(componentStack.slice(0, -1));
-      setLocationStack(poppedLocationStack);
+      setMoveType('back');
     }
   };
 
@@ -39,16 +43,16 @@ const PageStack: FC<any> = ({ AppRoute }) => {
   }, []);
 
   return (
-    // <TransitionGroup component={null}>
-    <PageStackContext.Provider
-      value={{
-        moveNextPage,
-        moveBeforePage,
-      }}
-    >
-      {componentStack}
-    </PageStackContext.Provider>
-    // </TransitionGroup>
+    <TransitionGroup className={moveType}>
+      <PageStackContext.Provider
+        value={{
+          moveNextPage,
+          moveBeforePage,
+        }}
+      >
+        {componentStack}
+      </PageStackContext.Provider>
+    </TransitionGroup>
   );
 };
 
