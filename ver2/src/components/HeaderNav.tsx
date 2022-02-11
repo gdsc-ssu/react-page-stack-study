@@ -1,14 +1,14 @@
 import React from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { usePageStackContext } from '../stack';
 
 const HeaderNav = () => {
-  const navigate = useNavigate();
   const { id } = useParams();
+  const { moveBeforePage } = usePageStackContext();
 
-  const goBack = () => navigate(-1);
   return (
     <>
-      <button className="back-btn" onClick={goBack}>
+      <button className="back-btn" onClick={moveBeforePage}>
         <i className="fas fa-chevron-left"></i>
       </button>
       <span className="header-title">{id}</span>

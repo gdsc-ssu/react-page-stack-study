@@ -1,5 +1,6 @@
 import React, { ReactNode } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
+import { usePageStackContext } from '../stack';
 
 interface LinkItemType {
   path: string;
@@ -27,13 +28,10 @@ const Navigation = () => {
 
 const LinkItem = ({ path, children }: LinkItemType) => {
   const { id } = useParams();
-  const navigate = useNavigate();
-  const moveNext = (path: string) => {
-    if (id !== path) navigate(path);
-  };
+  const { moveNextPage } = usePageStackContext();
 
   const onMoveNext = () => {
-    if (id !== path.slice(1)) moveNext(path);
+    if (id !== path.slice(1)) moveNextPage(path);
   };
 
   return (
