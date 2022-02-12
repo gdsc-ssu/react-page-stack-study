@@ -3,7 +3,8 @@ import React from 'react';
 
 const JunYeoung = () => {
     return (
-        <div>
+        <div style={{backgroundColor:"red"
+      }}>
           <h1>정준영입니다.</h1>
         </div>
       );
