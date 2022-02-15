@@ -10,31 +10,31 @@ type moveTypes = 'next' | 'back';
 const PageStack: FC<any> = ({ AppRoute }) => {
   const [componentStack, setComponentStack] = useState<any[]>([]);
   const [moveType, setMoveType] = useState<moveTypes>('next');
+  const [currentPage, setCurrentPage] = useState<number>(0);
 
   const navigate = useNavigate();
 
   const getPage = (location: string) => {
-    const pageNum = componentStack.length;
-    return (
-      <Page pageNum={pageNum} key={`${pageNum}`}>
-        {AppRoute(location)}
-      </Page>
-    );
+    return AppRoute(location);
+  };
+
+  const onExited = () => {
+    setComponentStack(componentStack.slice(0, -1));
   };
 
   const moveNextPage = (location: string) => {
     navigate(location);
+    setMoveType('next');
+    setCurrentPage((page) => page + 1);
 
     setComponentStack((prev) => [...prev, getPage(location)]);
-    setMoveType('next');
   };
 
   const moveBeforePage = () => {
     if (componentStack.length > 1) {
       navigate(-1);
-
-      setComponentStack(componentStack.slice(0, -1));
       setMoveType('back');
+      setCurrentPage((page) => page - 1);
     }
   };
 
@@ -50,7 +50,18 @@ const PageStack: FC<any> = ({ AppRoute }) => {
           moveBeforePage,
         }}
       >
-        {componentStack}
+        {componentStack.map((comp, idx) => {
+          return (
+            <Page
+              key={`${idx + 1}`}
+              pageNum={idx + 1}
+              currentPage={currentPage}
+              onExited={onExited}
+            >
+              {comp}
+            </Page>
+          );
+        })}
       </PageStackContext.Provider>
     </TransitionGroup>
   );

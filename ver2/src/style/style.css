@@ -30,8 +30,6 @@ div#root {
 }
 
 .page {
-  width: 100%;
-  height: 100%;
   position: absolute;
   width: 100%;
   height: 100%;
@@ -106,8 +104,6 @@ footer > nav {
 
 .next,
 .back {
-  position: relative;
-  overflow-x: hidden;
   width: 100%;
   height: 100%;
 }
@@ -118,28 +114,6 @@ footer > nav {
 }
 
 .next .slide-enter-active {
-  opacity: 1;
-  transform: translateX(0);
-  transition: all 500ms;
-}
-
-.next .slide-exit {
-  opacity: 1;
-  transform: translateX(0);
-}
-
-.next .slide-exit-active {
-  transform: translateX(-30%);
-  transition: all 500ms;
-}
-
-.back .slide-enter {
-  z-index: 1;
-  transform: translateX(-100%);
-}
-
-.back .slide-enter-active {
-  opacity: 1;
   transform: translateX(0);
   transition: all 500ms;
 }
@@ -150,6 +124,16 @@ footer > nav {
 }
 
 .back .slide-exit-active {
-  transform: translateX(30%);
+  transform: translateX(100%);
+  transition: all 500ms;
+}
+
+.root {
+  transform: translateX(0);
+  transition: all 500ms;
+}
+
+.notRoot {
+  transform: translateX(-30%);
   transition: all 500ms;
 }
