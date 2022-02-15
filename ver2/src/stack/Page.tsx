@@ -1,19 +1,27 @@
 import React, { FC, ReactNode } from 'react';
 import { CSSTransition } from 'react-transition-group';
 
-const Page: FC<{ pageNum: number; children: ReactNode }> = ({
-  pageNum,
-  children,
-}) => {
+interface PropsType {
+  children: ReactNode;
+  pageNum: number;
+  currentPage: number;
+  onExited: () => void;
+}
+
+const Page: FC<PropsType> = ({ children, pageNum, currentPage, onExited }) => {
   return (
     <CSSTransition
       classNames="slide"
       timeout={500}
       key={pageNum}
-      in={true}
+      in={pageNum <= currentPage}
+      onExited={onExited}
       unmountOnExit
     >
-      <div className="page" id={`${pageNum}`}>
+      <div
+        className={`page ${pageNum === currentPage ? 'root' : 'notRoot'}`}
+        id={`${pageNum}`}
+      >
         {children}
       </div>
     </CSSTransition>
