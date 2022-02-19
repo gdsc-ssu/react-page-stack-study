@@ -1,35 +1,31 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { CSSProperties, FC, ReactNode, useEffect, useState } from 'react';
-import './Page.css';
-import { MemoPage, Page } from './Page.style';
+import { FC, ReactNode, useEffect, useState } from 'react';
+import { MemoPage, Page } from './Page.styled';
 import { PageStackRouterContext } from './PageStackRouter.context';
 
-const LeavingPageStyle = {
-  transform: 'translateX(-50%)',
-};
-
-const EnteringPageStyle: CSSProperties = {
-  animationName: 'entering',
-  animationDuration: '0.5s',
-};
-
-const RecallingPageStyle: CSSProperties = {
-  animationName: 'recalling',
-  animationDuration: '0.5s',
-};
-
-type CurrentActionType = 'push' | 'pop' | 'replace';
+type CurrentActionType = 'push' | 'willPop' | 'pop' | 'replace';
 
 const PageStackRouter: FC<{ children?: ReactNode }> = ({ children }) => {
   const [pageStack, setPageStack] = useState<FC[]>([]);
   const [currentAction, setCurrentAction] = useState<CurrentActionType>('push');
+  useEffect(() => {
+    if (currentAction === 'willPop') {
+      const sched = setTimeout(() => {
+        setPageStack((pageStack) => pageStack.slice(0, -1));
+        setCurrentAction('pop');
+      }, 500);
+
+      return () => {
+        clearTimeout(sched);
+      };
+    }
+  }, [currentAction]);
   const push = (page: FC) => {
     setPageStack((pageStack) => [...pageStack, page]);
     setCurrentAction('push');
   };
   const pop = () => {
-    setPageStack((pageStack) => pageStack.slice(0, -1));
-    setCurrentAction('pop');
+    setCurrentAction('willPop');
   };
   const replace = (page: FC) => {
     setPageStack((pageStack) => pageStack.splice(-1, 1, page));
@@ -49,20 +45,35 @@ const PageStackRouter: FC<{ children?: ReactNode }> = ({ children }) => {
     >
       {pageStack.map((PageToBeRendered, index) => {
         if (index === pageStack.length - 1) {
-          const lastPageStyle =
-            currentAction === 'push' ? EnteringPageStyle : RecallingPageStyle;
+          let lastPageStyle: string = 'entering';
+          if (currentAction === 'push') {
+            lastPageStyle = 'entering';
+          } else if (currentAction === 'willPop') {
+            lastPageStyle = 'popping';
+          } else if (currentAction === 'pop') {
+            lastPageStyle = 'recalled';
+          }
           return (
-            <Page key={index} style={lastPageStyle}>
+            <MemoPage key={index} className={lastPageStyle}>
               <PageToBeRendered />
-            </Page>
+            </MemoPage>
+          );
+        }
+        if (index === pageStack.length - 2) {
+          let pageStyle = 'leaving';
+          if (currentAction === 'willPop') {
+            pageStyle = 'recalling';
+          } else if (currentAction === 'pop') {
+            pageStyle = 'left';
+          }
+          return (
+            <MemoPage key={index} className={pageStyle}>
+              <PageToBeRendered />
+            </MemoPage>
           );
         }
 
-        return (
-          <Page key={index} style={LeavingPageStyle}>
-            <PageToBeRendered />
-          </Page>
-        );
+        return null;
       })}
     </PageStackRouterContext.Provider>
   );
