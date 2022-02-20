@@ -1,12 +1,12 @@
 import { FC } from 'react';
-import { ChartsComponent } from './Charts/Charts.component';
+import { ContactsComponent } from './Contacts/Contacts.component';
 import { PageStackRouter } from './PageStackRouter/PageStackRouter.component';
 
 const App: FC = () => {
   return (
     <div className="App">
       <PageStackRouter>
-        <ChartsComponent />
+        <ContactsComponent />
       </PageStackRouter>
     </div>
   );

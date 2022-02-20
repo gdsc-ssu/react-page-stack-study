@@ -1,3 +1,10 @@
+:root {
+  --blue-100: #007aff;
+  --white-100: #ffffff;
+  --gray-100: #98979b;
+  --list-border-color: rgba(255, 255, 255, 0.22);
+}
+
 html,
 body {
   padding: 0;
