@@ -1,6 +1,9 @@
-import { FC, useState } from 'react';
-import { Contacts, Helmet } from './Contacts.styled';
+import { FC, Fragment, useState } from 'react';
+import { Contacts } from './Contacts.styled';
 import { faker } from '@faker-js/faker';
+import { usePageStackRouter } from '../PageStackRouter';
+import { ProfileComponent } from '../Profile/Profile.component';
+import { Helmet } from '../Helmet/Helmet.styled';
 
 interface ContactsProps {}
 interface ContactProps {
@@ -8,8 +11,15 @@ interface ContactProps {
 }
 
 const ContactComponent: FC<ContactProps> = ({ name }) => {
+  const { push } = usePageStackRouter();
   return (
-    <Contacts.Item>
+    <Contacts.Item
+      onClick={() => {
+        push(() => {
+          return <ProfileComponent name={name} />;
+        });
+      }}
+    >
       <Contacts.ItemName>{name}</Contacts.ItemName>
     </Contacts.Item>
   );
@@ -40,12 +50,12 @@ const ContactsComponent: FC<ContactsProps> = (props) => {
           // then render a new ContactListItemIndex
           if (i === 0 || contact.name[0] !== arr[i - 1].name[0]) {
             return (
-              <>
-                <Contacts.Item key={contact.name}>
+              <Fragment key={contact.name[0]}>
+                <Contacts.Item>
                   <Contacts.ItemIndex>{contact.name[0]}</Contacts.ItemIndex>
                 </Contacts.Item>
-                <ContactComponent name={contact.name} />
-              </>
+                <ContactComponent key={contact.name} name={contact.name} />
+              </Fragment>
             );
           }
 

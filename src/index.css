@@ -1,7 +1,9 @@
 :root {
   --blue-100: #007aff;
+  --blue-50: #1272d5;
   --white-100: #ffffff;
   --gray-100: #98979b;
+  --gray-200: #1c1c1e;
   --list-border-color: rgba(255, 255, 255, 0.22);
 }
 
