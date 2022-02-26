@@ -29,20 +29,21 @@ namespace Contacts {
     box-sizing: border-box;
     flex-shrink: 1;
     cursor: pointer;
+    border-bottom: 0.5px solid var(--list-border-color);
 
-    &::after {
+    /* &::after {
       content: '';
       top: auto;
       right: auto;
       left: 1rem;
       transform-origin: 50% 100%;
       transform: translateY(1.5rem);
-      position: absolute;
+      position: relative;
       background-color: var(--list-border-color);
       display: block;
       width: calc(100% - 2rem);
       height: 0.5px;
-    }
+    } */
   `;
   export const ItemName = styled.div`
     color: var(--white-100);

@@ -48,8 +48,11 @@ const Page = styled.div<{ status?: string }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-end;
   width: 100%;
+  height: 100vh;
+  overflow-y: auto;
+  margin-bottom: auto;
   transition: transform 1s ease;
   background-color: black;
 

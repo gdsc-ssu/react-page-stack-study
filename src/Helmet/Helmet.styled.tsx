@@ -2,6 +2,9 @@ import styled from 'styled-components';
 
 namespace Helmet {
   export const Container = styled.div`
+    position: sticky;
+    top: 0;
+    background-color: black;
     display: flex;
     flex-direction: row;
     align-items: center;
