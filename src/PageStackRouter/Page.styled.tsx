@@ -48,7 +48,7 @@ const Page = styled.div<{ status?: string }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: flex-start;
   width: 100%;
   height: 100vh;
   overflow-y: auto;
