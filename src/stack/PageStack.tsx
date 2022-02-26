@@ -1,4 +1,4 @@
-import { FC, useEffect, useState } from 'react';
+import { FC, TouchEvent, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TransitionGroup } from 'react-transition-group';
 import { PageStackContext } from '.';
@@ -11,6 +11,7 @@ const PageStack: FC<any> = ({ AppRoute }) => {
   const [componentStack, setComponentStack] = useState<any[]>([]);
   const [moveType, setMoveType] = useState<moveTypes>('next');
   const [currentPage, setCurrentPage] = useState<number>(0);
+  const [touching, setTouching] = useState<boolean>(false);
 
   const navigate = useNavigate();
 
@@ -39,11 +40,43 @@ const PageStack: FC<any> = ({ AppRoute }) => {
   };
 
   useEffect(() => {
+    const $stackComponent = document.querySelector('.stack');
+
+    const onTouchMove = (e: TouchEvent) => {
+      console.log('move', touching);
+    };
+
+    const onTouchEnd = (e: TouchEvent) => {
+      console.log('end', touching);
+
+      $stackComponent?.removeEventListener('touchmove', onTouchMove);
+      $stackComponent?.removeEventListener('touchend', onTouchEnd);
+    };
+
+    const onTouchStart = (e: TouchEvent) => {
+      if (e.touches[0].clientX < 10) {
+        console.log('start', e.touches[0].clientX);
+
+        $stackComponent?.addEventListener('touchmove', onTouchMove, { passive: true });
+        $stackComponent?.addEventListener('touchend', onTouchEnd, { passive: true });
+      }
+    };
+
+    $stackComponent?.addEventListener('touchstart', onTouchStart, { passive: true });
+
+    console.log('touching: ', touching);
+
+    return () => {
+      console.log('remove!');
+    };
+  }, [touching]);
+
+  useEffect(() => {
     moveNextPage('/');
   }, []);
 
   return (
-    <TransitionGroup className={moveType}>
+    <TransitionGroup className={`stack ${moveType}`}>
       <PageStackContext.Provider
         value={{
           moveNextPage,
@@ -52,12 +85,7 @@ const PageStack: FC<any> = ({ AppRoute }) => {
       >
         {componentStack.map((comp, idx) => {
           return (
-            <Page
-              key={`${idx + 1}`}
-              pageNum={idx + 1}
-              currentPage={currentPage}
-              onExited={onExited}
-            >
+            <Page key={`${idx + 1}`} pageNum={idx + 1} currentPage={currentPage} onExited={onExited}>
               {comp}
             </Page>
           );
