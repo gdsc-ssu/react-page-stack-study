@@ -50,7 +50,8 @@ const Page = styled.div<{ status?: string }>`
   align-items: center;
   justify-content: flex-start;
   width: 100%;
-  height: 100vh;
+  max-width: 480px;
+  height: 100%;
   overflow-y: auto;
   margin-bottom: auto;
   transition: transform 1s ease;
