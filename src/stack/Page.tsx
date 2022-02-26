@@ -5,10 +5,11 @@ interface PropsType {
   children: ReactNode;
   pageNum: number;
   currentPage: number;
+  mref?: React.RefObject<HTMLDivElement>;
   onExited: () => void;
 }
 
-const Page: FC<PropsType> = ({ children, pageNum, currentPage, onExited }) => {
+const Page: FC<PropsType> = ({ children, pageNum, currentPage, onExited, mref }) => {
   return (
     <CSSTransition
       classNames="slide"
@@ -18,10 +19,7 @@ const Page: FC<PropsType> = ({ children, pageNum, currentPage, onExited }) => {
       onExited={onExited}
       unmountOnExit
     >
-      <div
-        className={`page ${pageNum === currentPage ? 'root' : 'notRoot'}`}
-        id={`${pageNum}`}
-      >
+      <div className={`page ${pageNum === currentPage ? 'root' : 'notRoot'}`} id={`${pageNum}`} ref={mref}>
         {children}
       </div>
     </CSSTransition>

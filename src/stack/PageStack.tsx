@@ -1,4 +1,4 @@
-import { FC, TouchEvent, useEffect, useState } from 'react';
+import { FC, TouchEvent, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { TransitionGroup } from 'react-transition-group';
 import { PageStackContext } from '.';
@@ -11,7 +11,7 @@ const PageStack: FC<any> = ({ AppRoute }) => {
   const [componentStack, setComponentStack] = useState<any[]>([]);
   const [moveType, setMoveType] = useState<moveTypes>('next');
   const [currentPage, setCurrentPage] = useState<number>(0);
-  const [touching, setTouching] = useState<boolean>(false);
+  const lastPageRef = useRef<HTMLDivElement>(null);
 
   const navigate = useNavigate();
 
@@ -40,36 +40,44 @@ const PageStack: FC<any> = ({ AppRoute }) => {
   };
 
   useEffect(() => {
-    const $stackComponent = document.querySelector('.stack');
+    console.log(lastPageRef);
+    if (!lastPageRef.current) return;
+    const $ref = lastPageRef.current;
+    let startX = 0;
+    const $stackComponent = lastPageRef.current;
 
-    const onTouchMove = (e: TouchEvent) => {
-      console.log('move', touching);
+    const onTouchStart = (e: globalThis.TouchEvent) => {
+      const touch = e.touches[0];
+      const { screenX } = touch;
+      startX = screenX;
     };
 
-    const onTouchEnd = (e: TouchEvent) => {
-      console.log('end', touching);
+    const onTouchMove = (e: globalThis.TouchEvent) => {
+      const touch = e.touches[0];
+      const { clientX } = touch;
+      requestAnimationFrame(() => {
+        $ref.style.transition = '';
+        $ref.style.transform = `translate3d(${clientX}px, 0, 0)`;
+      });
 
-      $stackComponent?.removeEventListener('touchmove', onTouchMove);
-      $stackComponent?.removeEventListener('touchend', onTouchEnd);
+      if (startX > 10) return;
     };
 
-    const onTouchStart = (e: TouchEvent) => {
-      if (e.touches[0].clientX < 10) {
-        console.log('start', e.touches[0].clientX);
+    const onTouchEnd = (e: globalThis.TouchEvent) => {
+      const touch = e.changedTouches[0];
+      const { clientX } = touch;
 
-        $stackComponent?.addEventListener('touchmove', onTouchMove, { passive: true });
-        $stackComponent?.addEventListener('touchend', onTouchEnd, { passive: true });
+      // if touch ends on the right side of screen
+      if (clientX > window.innerWidth / 2) {
+        moveBeforePage();
       }
+      startX = 0;
     };
 
-    $stackComponent?.addEventListener('touchstart', onTouchStart, { passive: true });
-
-    console.log('touching: ', touching);
-
-    return () => {
-      console.log('remove!');
-    };
-  }, [touching]);
+    $stackComponent.addEventListener('touchstart', onTouchStart, { passive: true });
+    $stackComponent.addEventListener('touchmove', onTouchMove, { passive: true });
+    $stackComponent.addEventListener('touchend', onTouchEnd, { passive: true });
+  }, [lastPageRef, currentPage]);
 
   useEffect(() => {
     moveNextPage('/');
@@ -84,6 +92,21 @@ const PageStack: FC<any> = ({ AppRoute }) => {
         }}
       >
         {componentStack.map((comp, idx) => {
+          console.log(componentStack.length);
+          if (idx === componentStack.length - 1) {
+            console.log('last');
+            return (
+              <Page
+                key={`${idx + 1}`}
+                pageNum={idx + 1}
+                currentPage={currentPage}
+                onExited={onExited}
+                mref={lastPageRef}
+              >
+                {comp}
+              </Page>
+            );
+          }
           return (
             <Page key={`${idx + 1}`} pageNum={idx + 1} currentPage={currentPage} onExited={onExited}>
               {comp}

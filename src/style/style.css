@@ -130,7 +130,7 @@ footer > nav {
 
 .root {
   transform: translateX(0);
-  transition: all 500ms;
+  /* transition: all 500ms; */
 }
 
 .notRoot {
